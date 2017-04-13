@@ -26,6 +26,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL("CREATE TABLE events ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title VARCHAR(25) NOT NULL , UNIQUE (title))");
+        db.execSQL("CREATE TABLE location ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, latitude DOUBLE NOT NULL , longitude DOUBLE NOT NULL , radius INT NOT NULL)");
+        db.execSQL("CREATE TABLE time ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, time1 TIME NOT NULL, time2 TIME NOT NULL, sun BOOLEAN NOT NULL , mon BOOLEAN NOT NULL , tue BOOLEAN NOT NULL , wed BOOLEAN NOT NULL , thu BOOLEAN NOT NULL , fri BOOLEAN NOT NULL , sat BOOLEAN NOT NULL)");
+        db.execSQL("CREATE TABLE triggers ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , belongs_to INT NOT NULL , type INT NOT NULL , loc_ref INT NOT NULL , time_ref INT NOT NULL )");
+        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (belongs_to) REFERENCES events(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
+        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (loc_ref) REFERENCES location(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
+        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (time_ref) REFERENCES time(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
     }
 
     @Override

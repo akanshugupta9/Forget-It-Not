@@ -1,6 +1,7 @@
 package com.example.akanshugupta9.forgetitnot;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class EventCustormAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        Holder holder=new Holder();
+        final Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.event_list, null);
         holder.sn=(TextView) rowView.findViewById(R.id.sr_no);
@@ -60,7 +61,9 @@ public class EventCustormAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked "+events[position].title, Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(context,TriggersActivity.class);
+                intent.putExtra("SR_NO", holder.sn.getText());
+                context.startActivity(intent);
             }
         });
         return rowView;
