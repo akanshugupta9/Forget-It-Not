@@ -1,5 +1,6 @@
 package com.example.akanshugupta9.forgetitnot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,9 +10,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import static android.R.id.message;
+
 public class MainActivity extends AppCompatActivity {
+
+    ListView lv;
+    Context context;
+    DBHelper mydb;
+
+    ArrayList prgmName;
+    public static Event[] events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        context=this;
+        mydb = new DBHelper(this);
+
+        events=mydb.getEvents();
+
+        lv=(ListView) findViewById(R.id.listView);
+        lv.setAdapter(new EventCustormAdapter(this, events));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -38,8 +59,13 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==2)
         {
             String message=data.getStringExtra("MESSAGE");
-            Toast.makeText(this, message,
-                    Toast.LENGTH_SHORT).show();
+            if(!message.equals("")){
+                if(mydb.insertEvent(message)){
+                    Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static android.R.id.message;
+
 /**
  * Created by akanshugupta9 on 13/4/17.
  */
@@ -38,6 +40,15 @@ public class AddEventActivity extends Activity{
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent();
+        intent.putExtra("MESSAGE","");
+        setResult(2,intent);
+        finish();//finishing activity
+        super.onBackPressed();
     }
 
 }
