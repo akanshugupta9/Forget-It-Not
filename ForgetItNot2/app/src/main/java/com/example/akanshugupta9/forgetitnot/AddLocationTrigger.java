@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static android.R.id.message;
+
 /**
  * Created by akanshugupta9 on 13/4/17.
  */
@@ -27,11 +29,15 @@ public class AddLocationTrigger extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String message=longEt.getText().toString();
-                message+=latEt.getText().toString();
-                message+=radEt.getText().toString();
+                String longi=longEt.getText().toString();
+                String lati=latEt.getText().toString();
+                String rad=radEt.getText().toString();
+                String message=longi+lati+rad;
                 Intent intent=new Intent();
                 intent.putExtra("MESSAGE",message);
+                intent.putExtra("LONG",longi);
+                intent.putExtra("LAT",lati);
+                intent.putExtra("RAD",rad);
                 setResult(2,intent);
                 finish();//finishing activity
             }

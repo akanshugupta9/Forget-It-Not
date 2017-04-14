@@ -36,12 +36,17 @@ public class AddTimeRangeTrigger extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String message=hoursEt1.getText().toString();
-                message+=minEt1.getText().toString();
-                message+=hoursEt2.getText().toString();
-                message+=minEt2.getText().toString();
+                String hour1=hoursEt1.getText().toString();
+                String min1=minEt1.getText().toString();
+                String hour2=hoursEt2.getText().toString();
+                String min2=minEt2.getText().toString();
+                String message=""+hour1+min1+hour2+min2;
                 Intent intent=new Intent();
                 intent.putExtra("MESSAGE",message);
+                intent.putExtra("HOUR1",hour1);
+                intent.putExtra("MIN1",min1);
+                intent.putExtra("HOUR2",hour2);
+                intent.putExtra("MIN2",min2);
                 setResult(2,intent);
                 finish();//finishing activity
             }

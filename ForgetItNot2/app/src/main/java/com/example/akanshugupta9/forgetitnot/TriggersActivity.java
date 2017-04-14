@@ -19,15 +19,22 @@ import static android.R.id.message;
 
 public class TriggersActivity extends Activity {
 
-    TextView srNo;
+    TextView srNoTv;
+    int srNo;
+    String srNoS;
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.triggers_activity);
 
-        srNo=(TextView)findViewById(R.id.sr_no);
-        srNo.setText(getIntent().getStringExtra("SR_NO"));
+        srNoS=getIntent().getStringExtra("SR_NO");
+        //srNo=Integer.getInteger(srNoS);
+        mydb = new DBHelper(this);
+
+        srNoTv=(TextView)findViewById(R.id.sr_no);
+        srNoTv.setText(srNoS);
     }
 
     public void timeTrigger(View v){
@@ -52,14 +59,41 @@ public class TriggersActivity extends Activity {
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==1)
         {
+            String hour=data.getStringExtra("HOUR");
+            String min=data.getStringExtra("MIN");
             String message=data.getStringExtra("MESSAGE");
-            Toast.makeText(this, "1 "+message, Toast.LENGTH_SHORT).show();
+            if(!message.equals("")){
+                if(mydb.insertTimeTrigger(srNoS, hour, min)){
+                    Toast.makeText(this, "Trigger inserted", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Trigger failed", Toast.LENGTH_SHORT).show();
+                }
+            }
         }else if(requestCode==2){
+            String hour1=data.getStringExtra("HOUR1");
+            String min1=data.getStringExtra("MIN1");
+            String hour2=data.getStringExtra("HOUR2");
+            String min2=data.getStringExtra("MIN2");
             String message=data.getStringExtra("MESSAGE");
-            Toast.makeText(this, "2 "+message, Toast.LENGTH_SHORT).show();
+            if(!message.equals("")){
+                if(mydb.insertTimeRangeTrigger(srNoS, hour1, min1, hour2, min2)){
+                    Toast.makeText(this, "Trigger inserted", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Trigger failed", Toast.LENGTH_SHORT).show();
+                }
+            }
         }else if(requestCode==3){
+            String longi=data.getStringExtra("LONG");
+            String lati=data.getStringExtra("LAT");
+            String rad=data.getStringExtra("RAD");
             String message=data.getStringExtra("MESSAGE");
-            Toast.makeText(this, "3 "+message, Toast.LENGTH_SHORT).show();
+            if(!message.equals("")){
+                if(mydb.insertLocationTrigger(srNoS, longi, lati, rad)){
+                    Toast.makeText(this, "Trigger inserted", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Trigger failed", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 

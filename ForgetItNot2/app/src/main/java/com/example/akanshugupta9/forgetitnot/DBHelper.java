@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.R.attr.name;
 
 /**
  * Created by akanshugupta9 on 13/4/17.
@@ -17,6 +20,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "ForgetItNot.db";
+    private static final String TAG = "DBHelper";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -26,12 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL("CREATE TABLE events ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title VARCHAR(25) NOT NULL , UNIQUE (title))");
-        db.execSQL("CREATE TABLE location ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, latitude DOUBLE NOT NULL , longitude DOUBLE NOT NULL , radius INT NOT NULL)");
-        db.execSQL("CREATE TABLE time ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, time1 TIME NOT NULL, time2 TIME NOT NULL, sun BOOLEAN NOT NULL , mon BOOLEAN NOT NULL , tue BOOLEAN NOT NULL , wed BOOLEAN NOT NULL , thu BOOLEAN NOT NULL , fri BOOLEAN NOT NULL , sat BOOLEAN NOT NULL)");
-        db.execSQL("CREATE TABLE triggers ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , belongs_to INT NOT NULL , type INT NOT NULL , loc_ref INT NOT NULL , time_ref INT NOT NULL )");
-        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (belongs_to) REFERENCES events(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
-        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (loc_ref) REFERENCES location(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
-        db.execSQL("ALTER TABLE triggers ADD FOREIGN KEY (time_ref) REFERENCES time(sr_no) ON DELETE CASCADE ON UPDATE CASCADE");
+        db.execSQL("CREATE TABLE triggers ( sr_no INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , belongs_to INT NOT NULL , type INT NOT NULL , latitude DOUBLE , longitude DOUBLE  , radius INT  , hour1 int , min1 int, hour2 int , min2 int , days varchar(7) , FOREIGN KEY (belongs_to) REFERENCES events(sr_no) ON DELETE CASCADE ON UPDATE CASCADE)");
     }
 
     @Override
@@ -62,6 +61,42 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", name);
         db.insert("events", null, contentValues);
+        return true;
+    }
+
+    public boolean insertTimeTrigger (String srNo, String hour, String min) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("belongs_to", srNo);
+        contentValues.put("hour1", Integer.getInteger(hour));
+        contentValues.put("min1", Integer.getInteger(min));
+        contentValues.put("type", 1);
+        db.insert("triggers", null, contentValues);
+        return true;
+    }
+
+    public boolean insertTimeRangeTrigger (String srNo, String hour1, String min1, String hour2, String min2) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("belongs_to", srNo);
+        contentValues.put("hour1", Integer.getInteger(hour1));
+        contentValues.put("min1", Integer.getInteger(min1));
+        contentValues.put("hour2", Integer.getInteger(hour2));
+        contentValues.put("min2", Integer.getInteger(min2));
+        contentValues.put("type", 2);
+        db.insert("triggers", null, contentValues);
+        return true;
+    }
+
+    public boolean insertLocationTrigger (String srNo, String longi, String lat, String rad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("belongs_to", srNo);
+        contentValues.put("longitude", Integer.getInteger(longi));
+        contentValues.put("latitude", Integer.getInteger(lat));
+        contentValues.put("radius", Integer.getInteger(rad));
+        contentValues.put("type", 0);
+        db.insert("triggers", null, contentValues);
         return true;
     }
 

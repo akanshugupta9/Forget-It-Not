@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import static android.R.id.button1;
+import static android.R.id.message;
 
 /**
  * Created by akanshugupta9 on 13/4/17.
@@ -33,10 +34,13 @@ public class AddTimeTrigger extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                String message=hoursEt.getText().toString();
-                message+=minEt.getText().toString();
+                String hour=hoursEt.getText().toString();
+                String min=minEt.getText().toString();
+                String message=""+hour+min;
                 Intent intent=new Intent();
                 intent.putExtra("MESSAGE",message);
+                intent.putExtra("HOUR",hour);
+                intent.putExtra("MIN",min);
                 setResult(2,intent);
                 finish();//finishing activity
             }
