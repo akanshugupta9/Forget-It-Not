@@ -56,6 +56,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return array_list.toArray(new Event[0]);
     }
 
+    public Trigger[] getTriggers(String srNo) {
+        ArrayList<Trigger> array_list = new ArrayList<Trigger>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from triggers where belongs_to="+srNo, null );
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            Trigger tmp = new Trigger(res.getInt(res.getColumnIndex("sr_no")), res.getInt(res.getColumnIndex("type")), res.getInt(res.getColumnIndex("hour1")), res.getInt(res.getColumnIndex("min1")), res.getInt(res.getColumnIndex("hour2")), res.getInt(res.getColumnIndex("min2")), res.getString(res.getColumnIndex("days")), res.getDouble(res.getColumnIndex("longitude")), res.getDouble(res.getColumnIndex("latitude")), res.getInt(res.getColumnIndex("radius")));
+            array_list.add(tmp);
+            res.moveToNext();
+        }
+        return array_list.toArray(new Trigger[0]);
+    }
+
     public boolean insertEvent (String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -68,8 +84,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("belongs_to", srNo);
-        contentValues.put("hour1", Integer.getInteger(hour));
-        contentValues.put("min1", Integer.getInteger(min));
+        contentValues.put("hour1", hour);
+        contentValues.put("min1", min);
         contentValues.put("type", 1);
         db.insert("triggers", null, contentValues);
         return true;
@@ -79,10 +95,10 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("belongs_to", srNo);
-        contentValues.put("hour1", Integer.getInteger(hour1));
-        contentValues.put("min1", Integer.getInteger(min1));
-        contentValues.put("hour2", Integer.getInteger(hour2));
-        contentValues.put("min2", Integer.getInteger(min2));
+        contentValues.put("hour1", hour1);
+        contentValues.put("min1", min1);
+        contentValues.put("hour2", hour2);
+        contentValues.put("min2", min2);
         contentValues.put("type", 2);
         db.insert("triggers", null, contentValues);
         return true;
@@ -92,9 +108,9 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("belongs_to", srNo);
-        contentValues.put("longitude", Integer.getInteger(longi));
-        contentValues.put("latitude", Integer.getInteger(lat));
-        contentValues.put("radius", Integer.getInteger(rad));
+        contentValues.put("longitude", longi);
+        contentValues.put("latitude", lat);
+        contentValues.put("radius", rad);
         contentValues.put("type", 0);
         db.insert("triggers", null, contentValues);
         return true;

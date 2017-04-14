@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     Context context;
     DBHelper mydb;
-
-    ArrayList prgmName;
     public static Event[] events;
 
     @Override

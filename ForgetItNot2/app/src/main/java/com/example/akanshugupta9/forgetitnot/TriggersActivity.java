@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.R.attr.data;
 import static android.R.id.button1;
 import static android.R.id.message;
+import static com.example.akanshugupta9.forgetitnot.MainActivity.events;
 
 /**
  * Created by akanshugupta9 on 13/4/17.
@@ -20,9 +22,10 @@ import static android.R.id.message;
 public class TriggersActivity extends Activity {
 
     TextView srNoTv;
-    int srNo;
+    ListView lv;
     String srNoS;
     DBHelper mydb;
+    public static Trigger[] triggers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,12 @@ public class TriggersActivity extends Activity {
         setContentView(R.layout.triggers_activity);
 
         srNoS=getIntent().getStringExtra("SR_NO");
-        //srNo=Integer.getInteger(srNoS);
         mydb = new DBHelper(this);
+
+        triggers=mydb.getTriggers(srNoS);
+
+        lv=(ListView) findViewById(R.id.listView);
+        lv.setAdapter(new TriggerCustomAdapter(this, triggers));
 
         srNoTv=(TextView)findViewById(R.id.sr_no);
         srNoTv.setText(srNoS);
