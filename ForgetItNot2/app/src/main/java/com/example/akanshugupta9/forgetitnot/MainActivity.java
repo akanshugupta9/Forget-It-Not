@@ -2,7 +2,9 @@ package com.example.akanshugupta9.forgetitnot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +26,18 @@ public class MainActivity extends AppCompatActivity {
     DBHelper mydb;
     public static Event[] events;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SampleAlarmReceiver alarm = new SampleAlarmReceiver();
+
+        alarm.cancelAlarm(this);
+        alarm.setAlarm(this);
 
         context=this;
         mydb = new DBHelper(this);
